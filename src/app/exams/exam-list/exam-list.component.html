@@ -1,0 +1,21 @@
+<div>
+  <a [routerLink]="['./new',]">Lisää tentti</a>
+</div>
+
+<div>
+  <div *ngFor="let exam of exams">
+    <a style="cursor: pointer" [routerLink]="[exam.id]">
+      <p>{{exam.name}}</p>
+      <!-- <p>{{exam.description}}</p> -->
+    </a>
+  </div>
+</div>
+
+<!-- <div>
+  <div *ngFor="let exam of exams">
+    <a style="cursor: pointer" (click)="onSelect(exam)">
+      <p>{{exam.name}}</p>
+      <p>{{exam.description}}</p>
+    </a>
+  </div>
+</div> -->
