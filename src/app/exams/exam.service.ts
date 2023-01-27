@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { catchError, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { tap, of } from 'rxjs';
 
@@ -9,11 +9,14 @@ import { Exam, SelectedExam } from './exam.model';
   providedIn: 'root'
 })
 export class ExamService {
-  /* examsChanged = new Subject<Exam[]>();
-  private exams: Exam[] = []; */
+  private refetchSubject = new BehaviorSubject(null);
   private baseUrl = 'https://localhost:8080';
 
   constructor(private http: HttpClient) { }
+
+  get refetch() {
+    return this.refetchSubject.asObservable();
+  }
 
   getExams(): Observable<Exam[]> {
     return this.http
@@ -37,7 +40,10 @@ export class ExamService {
     return this.http
       .put(`${this.baseUrl}/exams/${id}`, { name: newName })
       .pipe(
-        tap(_ => console.log('updated exam name')),
+        tap(_ => {
+          console.log('updated exam name');
+          this.refetchSubject.next(null);
+        }),
         catchError(this.handleError<any>('updateExamName'))
       );
   }
@@ -49,6 +55,8 @@ export class ExamService {
       return of(result as T);
     };
   }
+
+  
 }
 
 
