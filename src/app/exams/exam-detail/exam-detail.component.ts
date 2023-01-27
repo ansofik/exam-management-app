@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Exam } from '../exam.model';
+import { SelectedExam } from '../exam.model';
 import { ExamService } from '../exam.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { ExamService } from '../exam.service';
 export class ExamDetailComponent implements OnInit{
   /* @Input() exam!: Exam; */
 
-  exam!: Exam;
+  exam: SelectedExam | undefined;
 
   constructor(private examService: ExamService,
               private route: ActivatedRoute,
@@ -19,14 +19,16 @@ export class ExamDetailComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(
-      (params: Params) => {
-        console.log("param", +params['id'])
-        this.exam = this.examService.getExam(+params['id']);
-      }
-    );
+    const id = this.route.snapshot.params['id'];
+    this.examService.getExam(id)
+      .subscribe(exam => {
+        console.log(exam)
+        this.exam = exam
+      });
   }
 
-
+  onEditExam() {
+    this.router.navigate(['edit'], {relativeTo: this.route});
+  }
 
 }

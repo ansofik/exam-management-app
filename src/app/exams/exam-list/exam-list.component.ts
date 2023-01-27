@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Exam } from '../exam.model';
 import { ExamService } from '../exam.service';
@@ -10,12 +11,26 @@ import { ExamService } from '../exam.service';
 })
 export class ExamListComponent {
   /* @Output() selectedExam = new EventEmitter<Exam>(); */
-  exams!: Exam[];
-  
-  constructor(private examService: ExamService) {}
+  exams: Exam[] = [];
+
+  constructor(private examService: ExamService,
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.exams = this.examService.getExams();
+    this.getExams();
+  }
+
+  getExams(): void {
+    this.examService.getExams()
+      .subscribe(exams => {
+        console.log(exams);
+        this.exams = exams
+      });
+  }
+
+  onAddExam() {
+    this.router.navigate(['new'], { relativeTo: this.route });
   }
 
   /* onSelect(exam: Exam) {

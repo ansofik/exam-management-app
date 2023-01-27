@@ -1,4 +1,32 @@
-<div>
-    <h2>{{exam.name}} Details</h2>
-    <p>{{exam.description}}</p>
+<div *ngIf="exam">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1>{{ exam.name}}</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-10">
+      <ul class="list-group">
+        <li 
+          class="list-group-item" 
+          *ngFor="let question of exam.questions">
+          {{question.questionText}}
+          <ul class="list-group">
+            <li 
+              class="list-group-item" 
+              [ngClass]="{'list-group-item-success': option.correct}"
+              *ngFor="let option of question.options">
+              {{option.optionText}}
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <button class="btn btn-success" (click)="onEditExam()">Muokkaa tenttiä</button>
+    </div>
+  </div>
 </div>
